@@ -1,0 +1,94 @@
+@import url('./css-reset.css');
+
+:root {
+  --main-bg-color: #6e83eb;
+  --title-color: #f4fff7;
+  --button-color: #ffa8bf;
+  --button-color-hover: #f0698f;
+  --answer-list-color: #b88dd9;
+  --answer-hover-color: #b2c0d4;
+  --black: #000000;
+  --right-answer-bg-color: #8cffa9;
+  --wrong-answer-bg-color: #f05e5e;
+
+  --font-family-heading: 'Press Start 2P', cursive;
+  --font-family-main: 'Roboto', sans-serif;
+}
+
+body {
+  background-color: var(--main-bg-color);
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+  text-align: center;
+  margin-top: 50px;
+  padding: 1rem;
+  max-width: 650px;
+  min-height: 70vh;
+}
+
+.title {
+  font-family: var(--font-family-heading);
+  color: var(--title-color);
+  padding: 20px;
+  font-size: 2.2rem;
+  text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.33);
+}
+
+.description {
+  font-family: var(--font-family-heading);
+  color: var(--title-color);
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+  margin: 10px;
+}
+
+.score {
+  font-family: var(--font-family-heading);
+  font-size: 1.8rem;
+  margin: 20px 0px;
+}
+
+.answer-list {
+  font-family: var(--font-family-heading);
+  list-style: none;
+  border: px solid var(--black);
+}
+
+.answer-list li {
+  min-width: 40vh;
+  line-height: 1.6rem;
+  padding: 15px;
+  margin: 30px;
+  background-color: var(--title-color);
+  color: var(--answer-list-color);
+  border: 4px solid var(--black);
+
+  cursor: pointer;
+}
+
+.answer-list li:hover {
+  background-color: var(--answer-hover-color);
+  color: var(--title-color);
+}
+
+.game-button {
+  background: var(--button-color);
+  color: var(--title-color);
+  font-family: var(--font-family-heading);
+  font-size: 1.5rem;
+  border: 4px solid var(--black);
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.33);
+  padding: 20px 40px;
+  margin-top: 10px;
+}
+
+.game-button:hover {
+  background: var(--button-color-hover);
+}
