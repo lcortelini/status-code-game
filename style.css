@@ -10,6 +10,7 @@
   --black: #000000;
   --right-answer-bg-color: #8cffa9;
   --wrong-answer-bg-color: #f05e5e;
+  --selected-answer-border-color: #8b5db0;
 
   --font-family-heading: 'Press Start 2P', cursive;
   --font-family-main: 'Roboto', sans-serif;
@@ -67,6 +68,17 @@ body {
   background-color: var(--title-color);
   color: var(--answer-list-color);
   border: 4px solid var(--black);
+
+  cursor: pointer;
+}
+.answer-list li.active {
+  min-width: 40vh;
+  line-height: 1.6rem;
+  padding: 15px;
+  margin: 30px;
+  background-color: var(--title-color);
+  color: var(--answer-list-color);
+  border: 4px solid var(--selected-answer-border-color);
 
   cursor: pointer;
 }
