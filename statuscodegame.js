@@ -20,12 +20,21 @@ function addLiEvents() {
   });
 }
 
+let newTarget = null;
+let last = null;
+
 function handleAnswerClick({ target }) {
   let active = target;
 
-  if (active === target) {
-    target.classList.add('active');
-    active = '';
+  if (newTarget) {
+    last.classList.remove('active');
+    last = null;
+    newTarget = false;
+  } else if (active === target) {
+    active.classList.add('active');
+    last = active;
+    active = null;
+    newTarget = true;
   }
 }
 
