@@ -9,9 +9,49 @@ const quizContainer = document.querySelector('.quiz-container');
 const gameBtn = document.querySelector('.game-button');
 const answers = document.querySelectorAll('li');
 const description = document.querySelector('.description');
+const scorePoints = document.querySelector('.score-points');
+
+let gameState = {
+  selectedAnswer: '',
+  questions: [],
+  rightQuestionIndex: 0,
+  righQuestionLi: '',
+  wrongAnswerLi: [],
+  score: 0,
+};
 
 function startGame() {
   gameBtn.addEventListener('click', handleGameBtn);
+}
+
+function handleGameBtn() {
+  gameBtn.innerText = 'Confirmar';
+  if (gameState.selectedAnswer) {
+    gameBtn.disabled = true;
+    compareAnswers();
+  } else {
+    gameBtn.disabled = true;
+    startGameStatus();
+  }
+}
+
+function compareAnswers() {
+  gameBtn.innerText = 'Próximo';
+  gameBtn.disabled = false;
+  if (
+    gameState.rightQuestionIndex ===
+    statusDescriptions.indexOf(gameState.selectedAnswer)
+  ) {
+    gameState.righQuestionLi.classList.add('right');
+    gameState.score++;
+    gameState.selectedAnswer = '';
+  } else {
+    gameState.righQuestionLi.classList.add('wrong');
+    gameState.selectedAnswer = '';
+  }
+
+  scorePoints.innerText = gameState.score;
+  active = null;
 }
 
 function addLiEvents() {
@@ -22,27 +62,38 @@ function addLiEvents() {
 
 let newTarget = null;
 let last = null;
+let active = null;
 
 function handleAnswerClick({ target }) {
-  let active = target;
+  active = target;
 
   if (newTarget) {
     last.classList.remove('active');
+    gameState.selectedAnswer = '';
     last = null;
     newTarget = false;
+    gameBtn.disabled = true;
   } else if (active === target) {
     active.classList.add('active');
+    gameState.selectedAnswer = `${active.innerText}`;
+    gameState.righQuestionLi = active;
     last = active;
     active = null;
     newTarget = true;
+    gameBtn.disabled = false;
   }
 }
 
-function handleGameBtn() {
-  startGameStatus();
+function removeLiClass() {
+  if (gameState.righQuestionLi && last) {
+    last.classList.remove('active');
+    gameState.righQuestionLi.classList.remove('right');
+    gameState.righQuestionLi.classList.remove('wrong');
+  }
 }
 
 function startGameStatus() {
+  removeLiClass();
   removeQuizContainerHidden();
   addLiEvents();
   pickRandomQuestions();
@@ -65,6 +116,7 @@ function pickRandomQuestions() {
   };
 
   let questions = [getQuestion(), getQuestion(), getQuestion(), getQuestion()];
+  gameState.questions = questions;
 
   //popular as questões aleatórias nas li's
   answers.forEach((li, index) => {
@@ -81,11 +133,7 @@ function pickRandomQuestions() {
   description.style.fontSize = '1.6rem';
   gameTitle.style.visibility = 'hidden';
 
-  return rightQuestionIndex;
+  gameState.rightQuestionIndex = rightQuestionIndex;
 }
-
-// console.log(Object.values(StatusAndCodes)[0]); // Pega cada posição da array
-
-// console.log((answerList.children[2].innerText = `${statusDescriptions[2]}`));
 
 startGame();
