@@ -83,6 +83,30 @@ body {
   cursor: pointer;
 }
 
+.answer-list li.right {
+  min-width: 40vh;
+  line-height: 1.6rem;
+  padding: 15px;
+  margin: 30px;
+  background-color: var(--title-color);
+  color: var(--answer-list-color);
+  border: 4px solid var(--right-answer-bg-color);
+
+  cursor: pointer;
+}
+
+.answer-list li.wrong {
+  min-width: 40vh;
+  line-height: 1.6rem;
+  padding: 15px;
+  margin: 30px;
+  background-color: var(--title-color);
+  color: var(--answer-list-color);
+  border: 4px solid var(--wrong-answer-bg-color);
+
+  cursor: pointer;
+}
+
 .answer-list li:hover {
   background-color: var(--answer-hover-color);
   color: var(--title-color);
