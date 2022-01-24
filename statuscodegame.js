@@ -10,14 +10,31 @@ const gameBtn = document.querySelector('.game-button');
 const answers = document.querySelectorAll('li');
 const description = document.querySelector('.description');
 const scorePoints = document.querySelector('.score-points');
+let round = document.querySelector('.rounds');
+
+const goodGreetings = [
+  'Ótimo trabalho!',
+  'Grande profissional!',
+  'Fantástico!',
+  'Siiim!',
+  'Isso!',
+];
+const badGreetings = [
+  'Mais sorte na próxima vez!',
+  'Continue tentando!',
+  'Você consegue na próxima vez!',
+  'A melhor maneira de aprender é cometendo erros!',
+  'Você vai chegar lá!',
+];
 
 let gameState = {
-  selectedAnswer: '',
+  selectedAnswerDescription: '',
   questions: [],
   rightQuestionIndex: 0,
-  righQuestionLi: '',
+  chosenAnswer: '',
   wrongAnswerLi: [],
   score: 0,
+  round: 1,
 };
 
 function startGame() {
@@ -25,13 +42,37 @@ function startGame() {
 }
 
 function handleGameBtn() {
-  gameBtn.innerText = 'Confirmar';
-  if (gameState.selectedAnswer) {
-    gameBtn.disabled = true;
-    compareAnswers();
+  if (gameBtn.innerText === 'Resultado') {
+    displayResult();
   } else {
+    gameBtn.innerText = 'Confirmar';
+    if (gameState.selectedAnswerDescription) {
+      gameBtn.disabled = true;
+      compareAnswers();
+    } else {
+      gameBtn.disabled = true;
+      startGameStatus();
+    }
+  }
+}
+
+function handleAnswerClick({ target }) {
+  active = target;
+
+  if (newTarget) {
+    last.classList.remove('active');
+    gameState.selectedAnswerDescription = '';
+    last = null;
+    newTarget = false;
     gameBtn.disabled = true;
-    startGameStatus();
+  } else if (active === target) {
+    active.classList.add('active');
+    gameState.selectedAnswerDescription = `${active.innerText}`;
+    gameState.chosenAnswer = active;
+    last = active;
+    active = null;
+    newTarget = true;
+    gameBtn.disabled = false;
   }
 }
 
@@ -40,16 +81,16 @@ function compareAnswers() {
   gameBtn.disabled = false;
   if (
     gameState.rightQuestionIndex ===
-    statusDescriptions.indexOf(gameState.selectedAnswer)
+    statusDescriptions.indexOf(gameState.selectedAnswerDescription)
   ) {
-    gameState.righQuestionLi.classList.add('right');
+    gameState.chosenAnswer.classList.add('right');
     gameState.score++;
-    gameState.selectedAnswer = '';
+    gameState.selectedAnswerDescription = '';
   } else {
-    gameState.righQuestionLi.classList.add('wrong');
-    gameState.selectedAnswer = '';
+    gameState.chosenAnswer.classList.add('wrong');
+    gameState.selectedAnswerDescription = '';
   }
-
+  updateRound();
   scorePoints.innerText = gameState.score;
   active = null;
 }
@@ -64,31 +105,11 @@ let newTarget = null;
 let last = null;
 let active = null;
 
-function handleAnswerClick({ target }) {
-  active = target;
-
-  if (newTarget) {
-    last.classList.remove('active');
-    gameState.selectedAnswer = '';
-    last = null;
-    newTarget = false;
-    gameBtn.disabled = true;
-  } else if (active === target) {
-    active.classList.add('active');
-    gameState.selectedAnswer = `${active.innerText}`;
-    gameState.righQuestionLi = active;
-    last = active;
-    active = null;
-    newTarget = true;
-    gameBtn.disabled = false;
-  }
-}
-
 function removeLiClass() {
-  if (gameState.righQuestionLi && last) {
+  if (gameState.chosenAnswer && last) {
     last.classList.remove('active');
-    gameState.righQuestionLi.classList.remove('right');
-    gameState.righQuestionLi.classList.remove('wrong');
+    gameState.chosenAnswer.classList.remove('right');
+    gameState.chosenAnswer.classList.remove('wrong');
   }
 }
 
@@ -101,13 +122,6 @@ function startGameStatus() {
 
 function removeQuizContainerHidden() {
   quizContainer.removeAttribute('hidden');
-}
-
-//função para gerar inteiros aleatórios
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 function pickRandomQuestions() {
@@ -134,6 +148,46 @@ function pickRandomQuestions() {
   gameTitle.style.visibility = 'hidden';
 
   gameState.rightQuestionIndex = rightQuestionIndex;
+  round.innerText = gameState.round;
+}
+
+function updateRound() {
+  if (gameState.round === 10) {
+    gameBtn.innerText = 'Resultado';
+  } else {
+    gameState.round++;
+  }
+}
+
+function displayResult() {
+  if (gameState.score >= 7) {
+    quizContainer.setAttribute('hidden', 'hidden');
+    gameBtn.innerText = 'Recomeçar!';
+    description.innerText = `${
+      goodGreetings[getRandomInt(0, goodGreetings.length)]
+    }`;
+  } else {
+    quizContainer.setAttribute('hidden', 'hidden');
+    gameBtn.innerText = 'Recomeçar!';
+    description.innerText = `${
+      badGreetings[getRandomInt(0, goodGreetings.length)]
+    }`;
+  }
+  clearGameState();
+}
+
+function clearGameState() {
+  gameState.score = 0;
+  gameState.round = 1;
+  scorePoints.innerText = gameState.score;
+  round.innerText = gameState.round;
+}
+
+//função para gerar inteiros aleatórios
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 startGame();
