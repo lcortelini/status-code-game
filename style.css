@@ -128,3 +128,25 @@ body {
 .game-button:hover {
   background: var(--button-color-hover);
 }
+
+.footer {
+  color: var(--title-color);
+  bottom: 0;
+  margin-bottom: 20px;
+  position: fixed;
+  width: 90%;
+  text-align: center;
+  font-family: var(--font-family-main);
+}
+
+a {
+  color: var(--title-color);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:hover {
+  color: var(--answer-hover-color);
+  text-decoration: none;
+  cursor: pointer;
+}
