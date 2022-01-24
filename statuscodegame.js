@@ -7,9 +7,11 @@ const statusDescriptions = [...Object.values(StatusAndCodes)];
 const gameTitle = document.querySelector('.title');
 const quizContainer = document.querySelector('.quiz-container');
 const gameBtn = document.querySelector('.game-button');
+const answersList = document.querySelector('.answer-list');
 const answers = document.querySelectorAll('li');
 const description = document.querySelector('.description');
 const scorePoints = document.querySelector('.score-points');
+const scoreH2 = document.querySelector('.score');
 let round = document.querySelector('.rounds');
 
 const goodGreetings = [
@@ -37,6 +39,14 @@ let gameState = {
   round: 1,
 };
 
+let selectedAnswerState = {
+  newTarget: null,
+  last: null,
+  active: null,
+};
+
+let { newTarget, active, last } = selectedAnswerState;
+
 function startGame() {
   gameBtn.addEventListener('click', handleGameBtn);
 }
@@ -57,6 +67,7 @@ function handleGameBtn() {
 }
 
 function handleAnswerClick({ target }) {
+  resetClickSelection();
   active = target;
 
   if (newTarget) {
@@ -64,7 +75,7 @@ function handleAnswerClick({ target }) {
     gameState.selectedAnswerDescription = '';
     last = null;
     newTarget = false;
-    gameBtn.disabled = true;
+    disableBtn();
   } else if (active === target) {
     active.classList.add('active');
     gameState.selectedAnswerDescription = `${active.innerText}`;
@@ -72,8 +83,22 @@ function handleAnswerClick({ target }) {
     last = active;
     active = null;
     newTarget = true;
-    gameBtn.disabled = false;
+    enableBtn();
   }
+}
+
+function resetClickSelection() {
+  active = null;
+  newTarget = null;
+  last = null;
+}
+
+function disableBtn() {
+  gameBtn.disabled = true;
+}
+
+function enableBtn() {
+  gameBtn.disabled = false;
 }
 
 function compareAnswers() {
@@ -101,10 +126,6 @@ function addLiEvents() {
   });
 }
 
-let newTarget = null;
-let last = null;
-let active = null;
-
 function removeLiClass() {
   if (gameState.chosenAnswer && last) {
     last.classList.remove('active');
@@ -114,8 +135,8 @@ function removeLiClass() {
 }
 
 function startGameStatus() {
-  removeLiClass();
   removeQuizContainerHidden();
+  showAnswers();
   addLiEvents();
   pickRandomQuestions();
 }
@@ -149,6 +170,7 @@ function pickRandomQuestions() {
 
   gameState.rightQuestionIndex = rightQuestionIndex;
   round.innerText = gameState.round;
+  removeLiClass();
 }
 
 function updateRound() {
@@ -160,20 +182,32 @@ function updateRound() {
 }
 
 function displayResult() {
+  gameTitle.style.visibility = '';
+  gameBtn.innerText = 'Recomeçar!';
+  hideAnswers();
   if (gameState.score >= 7) {
-    quizContainer.setAttribute('hidden', 'hidden');
-    gameBtn.innerText = 'Recomeçar!';
     description.innerText = `${
       goodGreetings[getRandomInt(0, goodGreetings.length)]
     }`;
   } else {
-    quizContainer.setAttribute('hidden', 'hidden');
-    gameBtn.innerText = 'Recomeçar!';
     description.innerText = `${
       badGreetings[getRandomInt(0, goodGreetings.length)]
     }`;
   }
   clearGameState();
+}
+
+function showAnswers() {
+  answersList.removeAttribute('hidden');
+}
+
+function hideAnswers() {
+  answersList.setAttribute('hidden', 'hidden');
+  showFinalScore();
+}
+
+function showFinalScore() {
+  scoreH2.innerText = `Acertos: ${gameState.score}/10`;
 }
 
 function clearGameState() {
