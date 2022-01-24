@@ -11,8 +11,10 @@ const answersList = document.querySelector('.answer-list');
 const answers = document.querySelectorAll('li');
 const description = document.querySelector('.description');
 const scorePoints = document.querySelector('.score-points');
-const scoreH2 = document.querySelector('.score');
-let round = document.querySelector('.rounds');
+let scoreH2 = document.querySelector('.score');
+const round = document.querySelector('.rounds');
+
+const originalH2ScoreState = scoreH2.innerHTML;
 
 const goodGreetings = [
   'Ótimo trabalho!',
@@ -135,10 +137,15 @@ function removeLiClass() {
 }
 
 function startGameStatus() {
+  restoreOriginalH2();
   removeQuizContainerHidden();
   showAnswers();
   addLiEvents();
   pickRandomQuestions();
+}
+
+function restoreOriginalH2() {
+  scoreH2.innerHTML = originalH2ScoreState;
 }
 
 function removeQuizContainerHidden() {
