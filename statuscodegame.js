@@ -12,6 +12,7 @@ const answers = document.querySelectorAll('li');
 const description = document.querySelector('.description');
 const scorePoints = document.querySelector('.score-points');
 let scoreH2 = document.querySelector('.score');
+let finalScoreH2 = document.querySelector('.final-score');
 const round = document.querySelector('.rounds');
 
 const originalH2ScoreState = scoreH2.innerHTML;
@@ -42,12 +43,11 @@ let gameState = {
 };
 
 let selectedAnswerState = {
-  newTarget: null,
   last: null,
   active: null,
 };
 
-let { newTarget, active, last } = selectedAnswerState;
+let { active, last } = selectedAnswerState;
 
 function startGame() {
   gameBtn.addEventListener('click', handleGameBtn);
@@ -57,9 +57,10 @@ function handleGameBtn() {
   if (gameBtn.innerText === 'Resultado') {
     displayResult();
   } else {
-    gameBtn.innerText = 'Confirmar';
+    gameBtn.innerText = 'Selecione';
     if (gameState.selectedAnswerDescription) {
       gameBtn.disabled = true;
+      gameBtn.innerText = 'Próximo';
       compareAnswers();
     } else {
       gameBtn.disabled = true;
@@ -69,30 +70,23 @@ function handleGameBtn() {
 }
 
 function handleAnswerClick({ target }) {
-  resetClickSelection();
   active = target;
 
-  if (newTarget) {
-    last.classList.remove('active');
-    gameState.selectedAnswerDescription = '';
-    last = null;
-    newTarget = false;
+  if (active.classList.contains('active')) {
+    active.classList.remove('active');
+    gameBtn.innerText = 'Selecione';
     disableBtn();
-  } else if (active === target) {
+  } else {
+    if (last) {
+      last.classList.remove('active');
+    }
     active.classList.add('active');
     gameState.selectedAnswerDescription = `${active.innerText}`;
     gameState.chosenAnswer = active;
     last = active;
-    active = null;
-    newTarget = true;
+    gameBtn.innerText = 'Confirmar';
     enableBtn();
   }
-}
-
-function resetClickSelection() {
-  active = null;
-  newTarget = null;
-  last = null;
 }
 
 function disableBtn() {
@@ -104,7 +98,6 @@ function enableBtn() {
 }
 
 function compareAnswers() {
-  gameBtn.innerText = 'Próximo';
   gameBtn.disabled = false;
   if (
     gameState.rightQuestionIndex ===
@@ -117,9 +110,10 @@ function compareAnswers() {
     gameState.chosenAnswer.classList.add('wrong');
     gameState.selectedAnswerDescription = '';
   }
-  updateRound();
+
   scorePoints.innerText = gameState.score;
   active = null;
+  updateRound();
 }
 
 function addLiEvents() {
@@ -137,7 +131,8 @@ function removeLiClass() {
 }
 
 function startGameStatus() {
-  restoreOriginalH2();
+  showScoreH2();
+  hideFinalScoreH2();
   removeQuizContainerHidden();
   showAnswers();
   addLiEvents();
@@ -181,7 +176,7 @@ function pickRandomQuestions() {
 }
 
 function updateRound() {
-  if (gameState.round === 10) {
+  if (gameState.round === 3) {
     gameBtn.innerText = 'Resultado';
   } else {
     gameState.round++;
@@ -214,7 +209,17 @@ function hideAnswers() {
 }
 
 function showFinalScore() {
-  scoreH2.innerText = `Acertos: ${gameState.score}/10`;
+  scoreH2.setAttribute('hidden', 'hidden');
+  finalScoreH2.removeAttribute('hidden');
+  finalScoreH2.innerText = `Acertos: ${gameState.score}/10`;
+}
+
+function showScoreH2() {
+  scoreH2.removeAttribute('hidden');
+}
+
+function hideFinalScoreH2() {
+  finalScoreH2.setAttribute('hidden', 'hidden');
 }
 
 function clearGameState() {

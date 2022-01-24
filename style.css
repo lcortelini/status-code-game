@@ -48,7 +48,7 @@ body {
   margin: 10px;
 }
 
-.score {
+h2 {
   font-family: var(--font-family-heading);
   font-size: 1.8rem;
   margin: 20px 0px;
