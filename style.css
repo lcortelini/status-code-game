@@ -34,7 +34,7 @@ body {
 
 .title {
   font-family: var(--font-family-heading);
-  color: var(--title-color);
+  color: var(--black);
   padding: 20px;
   font-size: 2.4rem;
   text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.33);
@@ -149,4 +149,62 @@ a:hover {
   color: var(--answer-hover-color);
   text-decoration: none;
   cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .main-container {
+    height: 100%;
+    margin-top: 0;
+  }
+  .title {
+    display: flex;
+    flex-direction: column;
+    height: 30%;
+    line-height: 3rem;
+    color: black;
+  }
+  .description {
+    height: fit-content;
+    border: auto;
+    line-height: 2.4rem;
+  }
+  .answer-list {
+    border: auto;
+  }
+  .answer-list li {
+    align-self: center;
+    padding: 8px 10px;
+    max-width: 400px;
+    min-width: 100px;
+    margin: 10px;
+  }
+  .game-button {
+    margin-top: 30px;
+  }
+  .answer-list li.active {
+    padding: 8px 10px;
+    margin: 10px;
+    background-color: var(--title-color);
+    color: var(--answer-list-color);
+    border: 4px solid var(--selected-answer-border-color);
+    cursor: pointer;
+  }
+
+  .answer-list li.right {
+    padding: 8px 10px;
+    margin: 10px;
+    background-color: var(--title-color);
+    color: var(--answer-list-color);
+    border: 4px solid var(--right-answer-bg-color);
+    cursor: pointer;
+  }
+
+  .answer-list li.wrong {
+    padding: 8px 10px;
+    margin: 10px;
+    background-color: var(--title-color);
+    color: var(--answer-list-color);
+    border: 4px solid var(--wrong-answer-bg-color);
+    cursor: pointer;
+  }
 }
