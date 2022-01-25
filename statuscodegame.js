@@ -15,8 +15,6 @@ let scoreH2 = document.querySelector('.score');
 let finalScoreH2 = document.querySelector('.final-score');
 const round = document.querySelector('.rounds');
 
-const originalH2ScoreState = scoreH2.innerHTML;
-
 const goodGreetings = [
   'Ótimo trabalho!',
   'Grande profissional!',
@@ -40,6 +38,7 @@ let gameState = {
   wrongAnswerLi: [],
   score: 0,
   round: 1,
+  blockSelection: false,
 };
 
 let selectedAnswerState = {
@@ -54,6 +53,7 @@ function startGame() {
 }
 
 function handleGameBtn() {
+  gameState.blockSelection = false;
   if (gameBtn.innerText === 'Resultado') {
     displayResult();
   } else {
@@ -61,6 +61,7 @@ function handleGameBtn() {
     if (gameState.selectedAnswerDescription) {
       gameBtn.disabled = true;
       gameBtn.innerText = 'Próximo';
+      gameState.blockSelection = true;
       compareAnswers();
     } else {
       gameBtn.disabled = true;
@@ -69,23 +70,33 @@ function handleGameBtn() {
   }
 }
 
-function handleAnswerClick({ target }) {
-  active = target;
+function addLiEvents() {
+  answers.forEach((li) => {
+    li.addEventListener('click', handleAnswerClick);
+  });
+}
 
-  if (active.classList.contains('active')) {
-    active.classList.remove('active');
-    gameBtn.innerText = 'Selecione';
-    disableBtn();
-  } else {
-    if (last) {
-      last.classList.remove('active');
+function handleAnswerClick({ target }) {
+  if (gameState.blockSelection === false) {
+    active = target;
+
+    if (active.classList.contains('active')) {
+      active.classList.remove('active');
+      gameBtn.innerText = 'Selecione';
+      gameState.blockSelection = false;
+      disableBtn();
+    } else {
+      if (last) {
+        last.classList.remove('active');
+      }
+      active.classList.add('active');
+      gameState.selectedAnswerDescription = `${active.innerText}`;
+      gameState.chosenAnswer = active;
+      last = active;
+      gameBtn.innerText = 'Confirmar';
+      gameState.blockSelection === true;
+      enableBtn();
     }
-    active.classList.add('active');
-    gameState.selectedAnswerDescription = `${active.innerText}`;
-    gameState.chosenAnswer = active;
-    last = active;
-    gameBtn.innerText = 'Confirmar';
-    enableBtn();
   }
 }
 
@@ -116,12 +127,6 @@ function compareAnswers() {
   updateRound();
 }
 
-function addLiEvents() {
-  answers.forEach((li) => {
-    li.addEventListener('click', handleAnswerClick);
-  });
-}
-
 function removeLiClass() {
   if (gameState.chosenAnswer && last) {
     last.classList.remove('active');
@@ -137,10 +142,6 @@ function startGameStatus() {
   showAnswers();
   addLiEvents();
   pickRandomQuestions();
-}
-
-function restoreOriginalH2() {
-  scoreH2.innerHTML = originalH2ScoreState;
 }
 
 function removeQuizContainerHidden() {
@@ -176,7 +177,7 @@ function pickRandomQuestions() {
 }
 
 function updateRound() {
-  if (gameState.round === 3) {
+  if (gameState.round === 10) {
     gameBtn.innerText = 'Resultado';
   } else {
     gameState.round++;
