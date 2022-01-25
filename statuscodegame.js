@@ -33,6 +33,7 @@ const badGreetings = [
 let gameState = {
   selectedAnswerDescription: '',
   questions: [],
+  rightQuestion: '',
   rightQuestionIndex: 0,
   chosenAnswer: '',
   wrongAnswerLi: [],
@@ -120,6 +121,7 @@ function compareAnswers() {
   } else {
     gameState.chosenAnswer.classList.add('wrong');
     gameState.selectedAnswerDescription = '';
+    hightlightRightQuestion();
   }
 
   scorePoints.innerText = gameState.score;
@@ -132,6 +134,7 @@ function removeLiClass() {
     last.classList.remove('active');
     gameState.chosenAnswer.classList.remove('right');
     gameState.chosenAnswer.classList.remove('wrong');
+    removeHighlightFromRightQuestion();
   }
 }
 
@@ -162,10 +165,10 @@ function pickRandomQuestions() {
   });
 
   //escolher uma questão para ser a certa
-  let rightQuestion = questions[getRandomInt(0, 4)];
+  gameState.rightQuestion = questions[getRandomInt(0, 4)];
 
   //obter a casa da array com a resposta certa
-  let rightQuestionIndex = statusDescriptions.indexOf(rightQuestion);
+  let rightQuestionIndex = statusDescriptions.indexOf(gameState.rightQuestion);
 
   description.innerText = `Status do código ${statusCodes[rightQuestionIndex]}`;
   description.style.fontSize = '1.6rem';
@@ -174,6 +177,20 @@ function pickRandomQuestions() {
   gameState.rightQuestionIndex = rightQuestionIndex;
   round.innerText = gameState.round;
   removeLiClass();
+}
+
+function removeHighlightFromRightQuestion() {
+  answers.forEach((answer) => {
+    answer.classList.remove('right');
+  });
+}
+
+function hightlightRightQuestion() {
+  answers.forEach((answer) => {
+    if (answer.innerText === gameState.rightQuestion) {
+      answer.classList.add('right');
+    }
+  });
 }
 
 function updateRound() {
