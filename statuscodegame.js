@@ -32,7 +32,6 @@ const badGreetings = [
 
 let gameState = {
   selectedAnswerDescription: '',
-  questions: [],
   rightQuestion: '',
   rightQuestionIndex: 0,
   chosenAnswer: '',
@@ -151,13 +150,24 @@ function removeQuizContainerHidden() {
   quizContainer.removeAttribute('hidden');
 }
 
-function pickRandomQuestions() {
-  const getQuestion = () => {
-    return statusDescriptions[getRandomInt(0, statusDescriptions.length)];
-  };
+function getQuestion() {
+  return statusDescriptions[getRandomInt(0, statusDescriptions.length)];
+}
 
-  let questions = [getQuestion(), getQuestion(), getQuestion(), getQuestion()];
-  gameState.questions = questions;
+function pickRandomQuestions() {
+  let questions = [];
+
+  //inserir questions na array e filtrar repetidas
+  for (let i = 0; i <= 3; i++) {
+    let newQuestion = getQuestion();
+
+    if (questions.includes(newQuestion)) {
+      i--;
+      newQuestion = getQuestion();
+    } else {
+      questions.push(newQuestion);
+    }
+  }
 
   //popular as questões aleatórias nas li's
   answers.forEach((li, index) => {
@@ -179,17 +189,17 @@ function pickRandomQuestions() {
   removeLiClass();
 }
 
-function removeHighlightFromRightQuestion() {
-  answers.forEach((answer) => {
-    answer.classList.remove('right');
-  });
-}
-
 function hightlightRightQuestion() {
   answers.forEach((answer) => {
     if (answer.innerText === gameState.rightQuestion) {
       answer.classList.add('right');
     }
+  });
+}
+
+function removeHighlightFromRightQuestion() {
+  answers.forEach((answer) => {
+    answer.classList.remove('right');
   });
 }
 
