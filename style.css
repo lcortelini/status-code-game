@@ -207,4 +207,8 @@ a:hover {
     border: 4px solid var(--wrong-answer-bg-color);
     cursor: pointer;
   }
+
+  .footer {
+    position: relative;
+  }
 }
